@@ -111,7 +111,7 @@
 
           <div class="calendar-card">
             <div class="calendar-header">
-              <span>September 2026</span>
+              <span id="selected-date-label">September 2026</span>
             </div>
 
             <div class="calendar-days">
@@ -124,7 +124,7 @@
               <span>Sun</span>
             </div>
 
-            <div class="calendar-grid">
+            <div class="calendar-grid" id="calendar-grid">
               <div class="day muted">31</div>
               <div class="day">1</div>
               <div class="day">2</div>
@@ -166,35 +166,33 @@
             <h2>Reserve your appointment</h2>
           </div>
 
-          <form class="booking-form">
+          <form class="booking-form" id="booking-form">
             <div class="field-row">
               <label>
                 Full name
-                <input type="text" placeholder="Your name" />
+                <input type="text" placeholder="Your name" name="name" required />
               </label>
               <label>
                 Email
-                <input type="email" placeholder="you@example.com" />
+                <input type="email" placeholder="you@example.com" name="email" required />
               </label>
             </div>
 
             <div class="field-row">
               <label>
                 Date
-                <input type="date" />
+                <input type="date" id="date-input" name="date" value="2026-09-21" required />
               </label>
               <label>
                 Time
-                <select>
-                  <option>09:00</option>
-                  <option>10:30</option>
-                  <option>16:30</option>
-                  <option>17:00</option>
+                <select id="time-select" name="time" required>
+                  <option value="">Select a time</option>
                 </select>
               </label>
             </div>
 
             <button type="submit" class="primary-btn wide">Confirm booking</button>
+            <p id="booking-message" class="booking-message" aria-live="polite"></p>
           </form>
         </div>
       </section>
@@ -228,5 +226,73 @@
         </div>
       </div>
     </footer>
+
+    <script>
+      const dateInput = document.getElementById('date-input');
+      const timeSelect = document.getElementById('time-select');
+      const bookingForm = document.getElementById('booking-form');
+      const bookingMessage = document.getElementById('booking-message');
+
+      async function loadSlots(date) {
+        const response = await fetch(`/api/slots?date=${date}`);
+        const slots = await response.json();
+
+        timeSelect.innerHTML = '<option value="">Select a time</option>';
+
+        slots.forEach((slot) => {
+          if (slot.available) {
+            const option = document.createElement('option');
+            option.value = slot.time;
+            option.textContent = slot.time;
+            timeSelect.appendChild(option);
+          }
+        });
+
+        if (timeSelect.options.length === 1) {
+          const option = document.createElement('option');
+          option.value = 'no-slots';
+          option.textContent = 'No available slots';
+          option.disabled = true;
+          option.selected = true;
+          timeSelect.appendChild(option);
+        }
+      }
+
+      dateInput.addEventListener('change', (event) => {
+        loadSlots(event.target.value);
+      });
+
+      bookingForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const date = dateInput.value;
+        const time = timeSelect.value;
+
+        if (!date || !time || time === 'no-slots') {
+          bookingMessage.textContent = 'Choose a valid available time.';
+          bookingMessage.classList.add('error');
+          return;
+        }
+
+        const response = await fetch('/api/book', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ date, time })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          bookingMessage.textContent = result.message || 'Booking failed.';
+          bookingMessage.classList.add('error');
+          return;
+        }
+
+        bookingMessage.textContent = `Booked successfully for ${date} at ${time}.`;
+        bookingMessage.classList.remove('error');
+        loadSlots(date);
+      });
+
+      loadSlots(dateInput.value);
+    </script>
   </body>
 </html>

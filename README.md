@@ -8,6 +8,11 @@ A lightweight Python calendar scheduling framework for business owners and clien
 - Client booking on available time slots
 - Retrospective schedule updates that still preserve existing client bookings
 
+## Run demo
+```bash
+python /home/runner/work/Work-Website/Work-Website/main.py
+```
+
 ## Run tests
 ```bash
 python -m unittest discover -s test -p 'test_*.py'

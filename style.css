@@ -96,6 +96,126 @@ select {
   color: var(--text);
 }
 
+.main-nav,
+.header-inner > .primary-btn {
+  display: none;
+}
+
+.menu-toggle {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  cursor: pointer;
+}
+
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text);
+  content: "";
+}
+
+.hamburger {
+  position: relative;
+}
+
+.hamburger::before,
+.hamburger::after {
+  position: absolute;
+  left: 0;
+}
+
+.hamburger::before {
+  top: -6px;
+}
+
+.hamburger::after {
+  top: 6px;
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  display: block;
+  background: rgba(16, 32, 51, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.side-menu {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 40;
+  display: block;
+  width: min(320px, 86vw);
+  padding: 28px 24px;
+  background: var(--panel);
+  box-shadow: 12px 0 30px rgba(16, 32, 51, 0.15);
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+}
+
+body.menu-open {
+  overflow: hidden;
+}
+
+body.menu-open .side-menu {
+  transform: translateX(0);
+}
+
+body.menu-open .menu-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.side-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.menu-close {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.side-nav {
+  display: grid;
+  gap: 8px;
+  padding: 24px 0;
+}
+
+.side-nav a {
+  padding: 14px 0;
+  color: var(--muted);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.side-nav a:hover {
+  color: var(--primary);
+}
+
+.side-menu-button {
+  display: block;
+  text-align: center;
+}
+
 .primary-btn,
 .secondary-btn {
   border: none;
@@ -442,9 +562,6 @@ select:focus {
     grid-template-columns: 1fr;
   }
 
-  .main-nav {
-    display: none;
-  }
 }
 
 @media (max-width: 620px) {
@@ -452,7 +569,6 @@ select:focus {
     grid-template-columns: 1fr;
   }
 
-  .header-inner,
   .footer-inner {
     flex-direction: column;
     justify-content: center;

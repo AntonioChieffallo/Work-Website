@@ -10,7 +10,7 @@ A lightweight Python calendar scheduling framework for business owners and clien
 
 ## Run demo
 ```bash
-python /home/runner/work/Work-Website/Work-Website/main.py
+python "C:\Users\achie\SomeCodingShit\Work-Website\main.py"
 ```
 
 ## Run tests

@@ -10,8 +10,22 @@ A lightweight Python calendar scheduling framework for business owners and clien
 
 ## Run demo
 ```bash
-python "C:\Users\achie\SomeCodingShit\Work-Website\main.py"
+python "C:\Users\achie\SomeCodingShit\Work-Website\app.py"
 ```
+
+## Configure confirmation email
+Set these environment variables before starting the Flask app:
+
+```text
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USERNAME=your-account@example.com
+SMTP_PASSWORD=your-password
+SMTP_FROM=your-account@example.com
+SMTP_USE_TLS=true
+```
+
+Bookings still work without SMTP settings, but no confirmation email is sent.
 
 ## Run tests
 ```bash

@@ -229,6 +229,15 @@
       </section>
     </main>
 
+    <dialog class = "booking-dialog" id = "booking-dialog" aria-labelledby = "booking-dialog-title">
+      <div class = "booking-dialog-content">
+        <p class = "eyebrow">Booking confirmed</p>
+        <h2 id = "booking-dialog-title">You are all set.</h2>
+        <p id = "booking-dialog-message"></p>
+        <button type = "button" class = "primary-btn" id = "booking-dialog-close">Close</button>
+      </div>
+    </dialog>
+
     <footer class = "site-footer" id = "contact">
       <div class = "container footer-inner">
         <div>
@@ -250,6 +259,9 @@
       const timeSelect = document.getElementById('time-select');
       const bookingForm = document.getElementById('booking-form');
       const bookingMessage = document.getElementById('booking-message');
+      const bookingDialog = document.getElementById('booking-dialog');
+      const bookingDialogMessage = document.getElementById('booking-dialog-message');
+      const bookingDialogClose = document.getElementById('booking-dialog-close');
       const menuToggle = document.querySelector('.menu-toggle');
       const sideMenu = document.getElementById('side-menu');
       const menuCloseButtons = document.querySelectorAll('[data-menu-close]');
@@ -277,28 +289,42 @@
         if (event.key === 'Escape') setMenuOpen(false);
       });
 
-      async function loadSlots(date) {
-        const response = await fetch(`/api/slots?date=${date}`);
-        const slots = await response.json();
+      bookingDialogClose.addEventListener('click', () => bookingDialog.close());
 
+      async function loadSlots(date) {
         timeSelect.innerHTML = '<option value="">Select a time</option>';
 
-        slots.forEach((slot) => {
-          if (slot.available) {
+        try {
+          const response = await fetch(`/api/slots?date=${date}`);
+          if (!response.ok) throw new Error('Unable to load available times.');
+
+          const slots = await response.json();
+          slots.forEach((slot) => {
+            if (slot.available) {
+              const option = document.createElement('option');
+              option.value = slot.time;
+              option.textContent = slot.time;
+              timeSelect.appendChild(option);
+            }
+          });
+
+          if (timeSelect.options.length === 1) {
             const option = document.createElement('option');
-            option.value = slot.time;
-            option.textContent = slot.time;
+            option.value = 'no-slots';
+            option.textContent = 'No available slots';
+            option.disabled = true;
+            option.selected = true;
             timeSelect.appendChild(option);
           }
-        });
-
-        if (timeSelect.options.length === 1) {
+        } catch (error) {
           const option = document.createElement('option');
-          option.value = 'no-slots';
-          option.textContent = 'No available slots';
+          option.value = 'load-error';
+          option.textContent = 'Unable to load times';
           option.disabled = true;
           option.selected = true;
           timeSelect.appendChild(option);
+          bookingMessage.textContent = 'Start the Flask app to load available times.';
+          bookingMessage.classList.add('error');
         }
       }
 
@@ -310,8 +336,10 @@
         event.preventDefault();
         const date = dateInput.value;
         const time = timeSelect.value;
+        const name = bookingForm.elements.name.value.trim();
+        const email = bookingForm.elements.email.value.trim();
 
-        if (!date || !time || time === 'no-slots') {
+        if (!name || !email || !date || !time || time === 'no-slots' || time === 'load-error') {
           bookingMessage.textContent = 'Choose a valid available time.';
           bookingMessage.classList.add('error');
           return;
@@ -320,7 +348,7 @@
         const response = await fetch('/api/book', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ date, time })
+          body: JSON.stringify({ name, email, date, time })
         });
 
         const result = await response.json();
@@ -331,8 +359,11 @@
           return;
         }
 
-        bookingMessage.textContent = `Booked successfully for ${date} at ${time}.`;
+        bookingDialogMessage.textContent = result.email_sent
+          ? `Booked successfully for ${date} at ${time}. Confirmation emailed.`
+          : `Booked successfully for ${date} at ${time}.`;
         bookingMessage.classList.remove('error');
+        bookingDialog.showModal();
         loadSlots(date);
       });
 

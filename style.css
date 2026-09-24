@@ -1,14 +1,14 @@
 :root {
-  --bg: #f5f7fb;
-  --panel: #ffffff;
-  --panel-strong: #eef4ff;
-  --primary: #1d4ed8;
-  --primary-dark: #163db6;
-  --accent: #10b981;
-  --text: #102033;
-  --muted: #5d6b82;
-  --border: #dfe7f3;
-  --shadow: 0 16px 36px rgba(17, 24, 39, 0.08);
+  --bg: #0d151d;
+  --panel: #17232e;
+  --panel-strong: #203342;
+  --primary: #38bdf8;
+  --primary-dark: #0ea5e9;
+  --accent: #34d399;
+  --text: #e8f0f5;
+  --muted: #9aabba;
+  --border: #2c3d4c;
+  --shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
   --radius: 22px;
 }
 
@@ -51,7 +51,7 @@ select {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(245, 247, 251, 0.85);
+  background: rgba(13, 21, 29, 0.85);
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(223, 231, 243, 0.8);
 }
@@ -78,7 +78,7 @@ select {
   width: 32px;
   height: 32px;
   border-radius: 10px;
-  background: linear-gradient(135deg, var(--primary), #60a5fa);
+  background: linear-gradient(135deg, var(--primary-dark), #2dd4bf);
   color: #fff;
   font-size: 0.9rem;
   box-shadow: var(--shadow);
@@ -145,7 +145,7 @@ select {
   inset: 0;
   z-index: 30;
   display: block;
-  background: rgba(16, 32, 51, 0.35);
+  background: rgba(0, 0, 0, 0.58);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.25s ease;
@@ -159,7 +159,7 @@ select {
   width: min(320px, 86vw);
   padding: 28px 24px;
   background: var(--panel);
-  box-shadow: 12px 0 30px rgba(16, 32, 51, 0.15);
+  box-shadow: -12px 0 30px rgba(0, 0, 0, 0.3);
   transform: translateX(100%);
   transition: transform 0.25s ease;
 }
@@ -227,13 +227,13 @@ body.menu-open .menu-overlay {
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, var(--primary), #3b82f6);
-  color: #fff;
-  box-shadow: 0 10px 20px rgba(29, 78, 216, 0.2);
+  background: linear-gradient(135deg, var(--primary-dark), #14b8a6);
+  color: #07131a;
+  box-shadow: 0 10px 20px rgba(14, 165, 233, 0.2);
 }
 
 .secondary-btn {
-  background: #edf2ff;
+  background: #203442;
   color: var(--primary);
 }
 
@@ -313,7 +313,7 @@ p {
 
 .panel-card {
   width: min(100%, 380px);
-  background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+  background: linear-gradient(180deg, #1d2d3a 0%, #16232e 100%);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
@@ -370,7 +370,7 @@ p {
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 28px 22px;
-  box-shadow: 0 10px 24px rgba(16, 32, 51, 0.04);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
 }
 
 .icon {
@@ -381,7 +381,7 @@ p {
   justify-content: center;
   border-radius: 12px;
   margin-bottom: 18px;
-  background: #edf4ff;
+  background: #203442;
   color: var(--primary);
   font-weight: 700;
 }
@@ -443,7 +443,7 @@ p {
   place-items: center;
   min-height: 52px;
   border-radius: 12px;
-  background: #f7f9fc;
+  background: #1d2b37;
   border: 1px solid transparent;
   font-weight: 500;
 }
@@ -454,8 +454,8 @@ p {
 
 .calendar-grid .day.booked,
 .calendar-grid .day.filled {
-  background: #e8fff7;
-  color: #0d8d62;
+  background: #123d36;
+  color: #6ee7b7;
   border-color: rgba(16, 185, 129, 0.2);
 }
 
@@ -480,6 +480,35 @@ p {
   box-shadow: var(--shadow);
 }
 
+.booking-dialog {
+  width: min(420px, calc(100% - 32px));
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+}
+
+.booking-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.68);
+  backdrop-filter: blur(4px);
+}
+
+.booking-dialog-content {
+  padding: 32px;
+}
+
+.booking-dialog h2 {
+  margin-bottom: 12px;
+}
+
+.booking-dialog p:not(.eyebrow) {
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
 .field-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -501,7 +530,7 @@ select {
   padding: 0.95rem 1rem;
   border: 1px solid var(--border);
   border-radius: 12px;
-  background: #fbfcff;
+  background: #1d2b37;
   color: var(--text);
 }
 
@@ -531,7 +560,7 @@ select:focus {
 
 .site-footer {
   border-top: 1px solid var(--border);
-  background: #edf3ff;
+  background: #111d27;
 }
 
 .footer-inner {
